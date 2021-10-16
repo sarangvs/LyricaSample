@@ -5,7 +5,6 @@ import 'package:marquee/marquee.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 
-import 'audio_file.dart';
 
 
 class DemoPlayScreen extends StatefulWidget {

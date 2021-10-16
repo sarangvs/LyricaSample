@@ -6,7 +6,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'audio_file.dart';
 import 'managers/page_manager.dart';
 
 
