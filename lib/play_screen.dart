@@ -54,14 +54,14 @@ class PlayScreenState extends State<PlayScreen> {
   }
 
   Future<int> addUser(songTitle_2, songId_2, songData_2) async {
-    User firstUser =
-        User(name:  songTitle_2, num: songId_2, location: songData_2);
-    List<User> listOfUsers = [firstUser];
+    Song firstUser =
+        Song(name:  songTitle_2, num: songId_2, location: songData_2);
+    List<Song> listOfUsers = [firstUser];
     print("songtilte:$songTitle_2");
     print("songid: $songId_2");
     print("songdata: $songData_2");
     print('list of users $listOfUsers');
-    return await handler!.insertUser(listOfUsers);
+    return await handler!.insertSong(listOfUsers);
 
   }
 
@@ -240,13 +240,13 @@ class PlayScreenState extends State<PlayScreen> {
                             // ),
                             IconButton(
                               icon: repeat == 0
-                                  ? const Icon(Icons.repeat)
+                                  ? const Icon(Icons.playlist_add)
                                   : const Icon(
-                                      Icons.repeat,
+                                      Icons.playlist_add,
                                       color: Colors.orange,
                                     ),
                               onPressed: () {
-                                debugPrint("repeat button");
+                                debugPrint("Add playlist button");
                                 setState(() {
                                   repeat == 0 ? repeat = 1 : repeat = 0;
                                 });
