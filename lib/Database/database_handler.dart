@@ -8,34 +8,35 @@ class DatabaseHandler {
 
   Future<Database> initializeDB() async {
     String dbpath = await getDatabasesPath();
-    return openDatabase(join(dbpath, "favourite.db"),
+    return openDatabase(join(dbpath, "favSongDB.db"),
       version: 1,
       onCreate: (database, version,) async {
+        print("Creating favourite SONG");
         await database.execute(
-          "CREATE TABLE songs(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,num INTEGER NOT NULL,location TEXT NOT NULL)",);
+          "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,num INTEGER NOT NULL,location TEXT NOT NULL)",);
       },);
   }
 
-  Future <int> insertSong(List<Song>songs) async {
+  Future <int> insertUser(List<User>users) async {
     int result = 0;
     final Database db = await initializeDB();
-    for (var song in songs) {
-      result = await db.insert('songs', song.toMap());
+    for (var user in users) {
+      result = await db.insert('users', user.toMap());
     }
     return result;
   }
 
-  Future <List<Song>> retrieveSongs() async {
+  Future <List<User>> retrieveUsers() async {
     final Database db = await initializeDB();
-    final List <Map<String, Object?>>queryResult = await db.query('songs');
-    debugPrint("Query result: $queryResult");
-    return queryResult.map((e) => Song.fromMap(e)).toList();
+    final List <Map<String, Object?>>queryResult = await db.query('users');
+    debugPrint("Queryresult: $queryResult");
+    return queryResult.map((e) => User.fromMap(e)).toList();
   }
 
-  Future<void> deleteSongs(int id) async {
+  Future<void> deleteUser(int id) async {
     final db = await initializeDB();
     await db.delete(
-      'songs',
+      'users',
       where: "id = ?",
       whereArgs: [id],
     );

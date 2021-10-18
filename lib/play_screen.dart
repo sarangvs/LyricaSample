@@ -30,6 +30,8 @@ class PlayScreenState extends State<PlayScreen> {
   String currentTime = '', endTime = '';
   bool isPlaying = false;
 
+
+
   DatabaseHandler? handler;
   dynamic songTitle_2;
   dynamic songId_2;
@@ -52,16 +54,16 @@ class PlayScreenState extends State<PlayScreen> {
     _pageManager.dispose();
     super.dispose();
   }
-
+///ADDING SONGS
   Future<int> addUser(songTitle_2, songId_2, songData_2) async {
-    Song firstUser =
-        Song(name:  songTitle_2, num: songId_2, location: songData_2);
-    List<Song> listOfUsers = [firstUser];
+    User firstUser =
+        User(name:  songTitle_2, num: songId_2, location: songData_2);
+    List<User> listOfUsers = [firstUser];
     print("songtilte:$songTitle_2");
     print("songid: $songId_2");
     print("songdata: $songData_2");
     print('list of users $listOfUsers');
-    return await handler!.insertSong(listOfUsers);
+    return await handler!.insertUser(listOfUsers);
 
   }
 
@@ -240,13 +242,13 @@ class PlayScreenState extends State<PlayScreen> {
                             // ),
                             IconButton(
                               icon: repeat == 0
-                                  ? const Icon(Icons.playlist_add)
+                                  ? const Icon(Icons.repeat)
                                   : const Icon(
-                                      Icons.playlist_add,
+                                      Icons.repeat,
                                       color: Colors.orange,
                                     ),
                               onPressed: () {
-                                debugPrint("Add playlist button");
+                                debugPrint("repeat button");
                                 setState(() {
                                   repeat == 0 ? repeat = 1 : repeat = 0;
                                 });

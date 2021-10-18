@@ -38,9 +38,10 @@ class _FavouritesState extends State<Favourites> {
         body: Stack(
           children:  [
             FutureBuilder(
-              future: this.handler!.retrieveSongs(),
-              builder: (BuildContext context, AsyncSnapshot<List<Song>> snapshot) {
+              future: this.handler!.retrieveUsers(),
+              builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
                 if (snapshot.hasData) {
+                 print('dnskka $snapshot');
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -54,14 +55,14 @@ class _FavouritesState extends State<Favourites> {
                         ),
                         key: ValueKey<int>(snapshot.data![index].id!),
                         onDismissed: (DismissDirection direction) async {
-                          await handler!.deleteSongs(snapshot.data![index].id!);
+                          await handler!.deleteUser(snapshot.data![index].id!);
                           setState(() {
                             snapshot.data!.remove(snapshot.data![index]);
                           });
                         },
                         child: ListTile(
                           title: Text(snapshot.data![index].name,overflow: TextOverflow.ellipsis,),
-                          subtitle: Text(snapshot.data![index].name,overflow: TextOverflow.ellipsis,),
+                          subtitle: Text(snapshot.data![index].name ,overflow: TextOverflow.ellipsis,),
                           trailing: SizedBox(
                             height: Height / 7,
                             width: Width / 7,

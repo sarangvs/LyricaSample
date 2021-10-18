@@ -1,16 +1,16 @@
-class Song {
+class User {
   int? id;
   String name;
   int num;
   String location;
-  Song({
+  User({
     this.id,
     required this.name,
     required this.num,
     required this.location,
   });
 
-  Song.fromMap(Map<String, dynamic> res)
+  User.fromMap(Map<String, dynamic> res)
       : id = res['id'],
         name = res['name'],
         num = res['num'],
