@@ -46,7 +46,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               child: const Icon(Icons.playlist_add),
               onTap: () {
                 debugPrint('playlist button clicked');
-                _displayTextInputDialog(context);
+
               },
             ),
           ),
@@ -55,47 +55,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     );
   }
 
-  Future<void> _displayTextInputDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AlertDialog(
-                title: const Text(
-                  'New Playlist',
-                  style: TextStyle(
-                      fontFamily: 'Roboto', fontWeight: FontWeight.bold),
-                ),
-                content: TextField(
-                  onChanged: (value) {},
-                  controller: _textFieldController,
-                  decoration: const InputDecoration(),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Done',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                  )
-                ],
-              ),
-            ],
-          );
-        });
-  }
+
 }
 
 

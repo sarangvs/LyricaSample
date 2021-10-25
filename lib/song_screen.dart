@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:musicplayer/Database/db.dart';
 import 'package:musicplayer/play_screen.dart';
+import 'package:musicplayer/searchbar.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'Database/database_handler.dart';
@@ -22,16 +23,12 @@ class _SongscreenState extends State<Songscreen> {
   final GlobalKey<PlayScreenState> Key= GlobalKey<PlayScreenState>();
 
 
-
-
   @override
   void initState() {
     super.initState();
     getTracks();
     requestPermission();
- // addSongs();
   }
-
 
 
   requestPermission() async {
@@ -76,7 +73,7 @@ class _SongscreenState extends State<Songscreen> {
           Center(
             child: FutureBuilder<List<SongModel>>(
               future: _audioQuery.querySongs(
-                sortType: null,
+                sortType: SongSortType.DISPLAY_NAME,
                 orderType: OrderType.ASC_OR_SMALLER,
                 uriType: UriType.EXTERNAL,
                 ignoreCase: true,

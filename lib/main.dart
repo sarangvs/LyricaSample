@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musicplayer/favourites.dart';
 import 'package:musicplayer/my_playlist.dart';
+import 'package:musicplayer/searchbar.dart';
 import 'package:musicplayer/settings.dart';
 import './song_screen.dart';
 import './play_screen.dart';
 import 'managers/page_manager.dart';
 import 'managers/service.dart';
+import 'package:musicplayer/searchbar.dart';
 
 
 void main() async{
@@ -102,6 +104,10 @@ class _AppbarState extends State<Appbar> {
               color: Colors.black,
             ),
             onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SongSearch(songs: []),
+              );
               debugPrint('search button pressed');
             },
           ),
