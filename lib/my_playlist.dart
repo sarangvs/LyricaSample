@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:musicplayer/Database/playlist_db.dart';
 import 'package:musicplayer/Database/playlist_folder_handler.dart';
-import 'package:musicplayer/main.dart';
 import 'package:musicplayer/playlist_screen.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
+
 
 class Myplaylist extends StatefulWidget {
   const Myplaylist({Key? key}) : super(key: key);
@@ -153,7 +150,7 @@ class _MyplaylistState extends State<Myplaylist> {
                                        ListTile(
                                         leading: const Icon(
                                           Icons.playlist_add,
-                                          size: 50,
+                                          size: 45,
                                           color: Colors.grey,
                                         ),
                                         title: Text(snapshot.data![index].playListName,style:  const TextStyle(
@@ -161,9 +158,13 @@ class _MyplaylistState extends State<Myplaylist> {
                                             fontSize: 20,),
                                       ),
                                          onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreen(),));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) =>  PlaylistScreen(playlistfolderID:  playlistID ,),));
                                          },
-                                       )
+                                       ),
+                                      const Divider(
+                                        height: 0,
+                                        indent: 5,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -247,7 +248,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTap;
   final AppBar appBar;
 
-  CustomAppBar({ required this.onTap, required this.appBar});
+   CustomAppBar({ required this.onTap, required this.appBar});
 
   @override
   Widget build(BuildContext context) {

@@ -24,7 +24,6 @@ class _FavouritesState extends State<Favourites> {
     super.initState();
     handler = DatabaseHandler();
     player = AudioPlayer();
-
   }
 
   @override
@@ -41,7 +40,6 @@ class _FavouritesState extends State<Favourites> {
               future: this.handler!.retrieveUsers(),
               builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
                 if (snapshot.hasData) {
-                 print('dnskka $snapshot');
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (BuildContext context, int index) {

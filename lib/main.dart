@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:musicplayer/favourites.dart';
 import 'package:musicplayer/my_playlist.dart';
 import 'package:musicplayer/searchbar.dart';
+import 'package:musicplayer/select_playlist_track.dart';
 import 'package:musicplayer/settings.dart';
 import './song_screen.dart';
 import './play_screen.dart';
 import 'managers/page_manager.dart';
 import 'managers/service.dart';
 import 'package:musicplayer/searchbar.dart';
+
 
 
 void main() async{
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Music Player',
       home: Appbar(),
@@ -44,10 +46,12 @@ class Appbar extends StatefulWidget {
   _AppbarState createState() => _AppbarState();
 }
 
-var obj =  const Songscreen();
+var obj =   Songscreen();
 
 class _AppbarState extends State<Appbar> {
 
+
+  bool isSearching = false;
   final GlobalKey<PlayScreenState> Key= GlobalKey<PlayScreenState>();
 
   late final PageManger _pageManager;
@@ -87,14 +91,17 @@ class _AppbarState extends State<Appbar> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
+        title: !isSearching? const Text(
           'Lyrica',
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 25,
               fontFamily: 'Exo2'),
+        ): const TextField(decoration: InputDecoration(
+          hintText: 'Search'
         ),
+          style: TextStyle(color: Colors.black),),
         actions: [
           IconButton(
             padding:
@@ -104,10 +111,9 @@ class _AppbarState extends State<Appbar> {
               color: Colors.black,
             ),
             onPressed: () {
-              showSearch(
-                  context: context,
-                  delegate: SongSearch(songs: []),
-              );
+              setState(() {
+               Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchBar(),));
+              });
               debugPrint('search button pressed');
             },
           ),

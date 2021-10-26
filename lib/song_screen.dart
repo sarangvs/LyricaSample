@@ -8,7 +8,6 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 import 'Database/database_handler.dart';
 
-
 class Songscreen extends StatefulWidget {
   const Songscreen({Key? key}) : super(key: key);
 
@@ -20,8 +19,7 @@ class _SongscreenState extends State<Songscreen> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   List<SongModel> songs = [];
   int currentIndex = 0;
-  final GlobalKey<PlayScreenState> Key= GlobalKey<PlayScreenState>();
-
+  final GlobalKey<PlayScreenState> Key = GlobalKey<PlayScreenState>();
 
   @override
   void initState() {
@@ -30,17 +28,15 @@ class _SongscreenState extends State<Songscreen> {
     requestPermission();
   }
 
-
   requestPermission() async {
     if (!kIsWeb) {
       bool permissionStatus = await _audioQuery.permissionsStatus();
       if (!permissionStatus) {
         await _audioQuery.permissionsRequest();
       }
-      setState(() {});
+      //setState(() {});
     }
   }
-
 
   void getTracks() async {
     songs = await _audioQuery.querySongs();
@@ -86,71 +82,78 @@ class _SongscreenState extends State<Songscreen> {
                   return const Text("Nothing found!");
                 }
 
-              return
-            ListView.builder(
-              itemCount: songs.length,
-              itemBuilder: (context,  index) {
-                if (songs[index].data.contains("mp3")) {
-                  return   Column(
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          currentIndex =index;
-                          Navigator.push(context, MaterialPageRoute(builder: (context) =>  PlayScreen(
-                            changeTrack: changeTrack,
-                            songInfo: songs[currentIndex], Key: Key,
-                            //TODO : GLOBAL KEY
-
-                          ),));
-                        },
-                        child: ListTile(
-                          title: Text(songs[index].title,overflow: TextOverflow.ellipsis,),
-                          subtitle: Text(songs[index].artist ?? "Unknown Artist",overflow: TextOverflow.ellipsis,),
-                          trailing: SizedBox(
-                            height: Height / 7,
-                            width: Width / 7,
-                            child: const Icon(
-                                Icons.play_arrow_rounded,
-                                color: Colors.orange,
-                                size: 42,
+                return ListView.builder(
+                  itemCount: songs.length,
+                  itemBuilder: (context, index) {
+                    if (songs[index].data.contains("mp3")) {
+                      return Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              currentIndex = index;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlayScreen(
+                                      changeTrack: changeTrack,
+                                      songInfo: songs[currentIndex],
+                                      Key: Key,
+                                      //TODO : GLOBAL KEY
+                                    ),
+                                  ));
+                            },
+                            child: ListTile(
+                              title: Text(
+                                songs[index].title,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          leading: QueryArtworkWidget(
-                            artworkBorder: BorderRadius.circular(10),
-                            id: songs[index].id,
-                            type: ArtworkType.AUDIO,
-                            nullArtworkWidget: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blueGrey
+                              subtitle: Text(
+                                songs[index].artist ?? "Unknown Artist",
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              child: const Icon(Icons.audiotrack,color: Colors.white,),
-                              height: 50,
-                              width: 50,
+                              trailing: SizedBox(
+                                height: Height / 7,
+                                width: Width / 7,
+                                child: const Icon(
+                                  Icons.play_arrow_rounded,
+                                  color: Colors.orange,
+                                  size: 42,
+                                ),
+                              ),
+                              leading: QueryArtworkWidget(
+                                artworkBorder: BorderRadius.circular(10),
+                                id: songs[index].id,
+                                type: ArtworkType.AUDIO,
+                                nullArtworkWidget: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.blueGrey),
+                                  child: const Icon(
+                                    Icons.audiotrack,
+                                    color: Colors.white,
+                                  ),
+                                  height: 50,
+                                  width: 50,
+                                ),
+                              ),
                             ),
                           ),
-
-                        ),
-                      ),
-
-                      const Divider(
-                        height: 0,
-                        indent: 5,
-                      )
-                    ],
-                  );
-
-                }
-                return Container(
-                  height: 0,
+                          const Divider(
+                            height: 0,
+                            indent: 5,
+                          )
+                        ],
+                      );
+                    }
+                    return Container(
+                      height: 0,
+                    );
+                  },
                 );
               },
-            );
-
-              },
-        ),
+            ),
           ),
-      ],
+        ],
       ),
     ));
   }
