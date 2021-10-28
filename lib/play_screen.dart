@@ -47,6 +47,7 @@ class PlayScreenState extends State<PlayScreen> {
    _pageManager = PageManger();
     addUser(songTitle_2, songId_2, songData_2);
     handler =DatabaseHandler();
+    setSong(widget.songInfo);
   }
 
   @override
@@ -92,10 +93,18 @@ class PlayScreenState extends State<PlayScreen> {
   }
 
 
+  void stopSong(){
+    setState(() {
+      player.play();
+    });
+  }
+
 
   void changeStatus() {
     setState(() {
-      isPlaying = !isPlaying;
+      isPlaying =!isPlaying;
+    });
+    setState(() {
       if (isPlaying) {
         player.play();
       } else {
@@ -181,6 +190,7 @@ class PlayScreenState extends State<PlayScreen> {
                         color: Colors.white,
                       ),
                       onPressed: () {
+                        stopSong();
                         debugPrint('Back button clicked');
                         Navigator.pop(context);
                       },
@@ -343,7 +353,7 @@ class PlayScreenState extends State<PlayScreen> {
                                       color: Colors.orange,
                                       size: 70,
                                     ),
-                                    behavior: HitTestBehavior.translucent,
+                                   behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       changeStatus();
                                     },
