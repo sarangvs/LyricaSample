@@ -4,59 +4,95 @@ import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'managers/page_manager.dart';
 
 
+class FavPlayScreen extends StatefulWidget {
+  SongModel songInfo;
 
-class DemoPlayScreen extends StatefulWidget {
-  const DemoPlayScreen({Key? key}) : super(key: key);
+   FavPlayScreen({required this.songInfo,required this.changeTrack,required this.Key}) : super(key: Key);
+
+  Function changeTrack;
+ final GlobalKey<FFavPlayScreenState> Key;
 
   @override
-  _DemoPlayScreenState createState() => _DemoPlayScreenState();
+  FFavPlayScreenState createState() => FFavPlayScreenState();
 }
 
-class _DemoPlayScreenState extends State<DemoPlayScreen> {
-  double minimumValue=0.0, maximumValue=0.0, currentValue=0.0;
-  String currentTime='', endTime='';
+class FFavPlayScreenState extends State<FavPlayScreen> {
+  double minimumValue = 0.0, maximumValue = 0.0, currentValue = 0.0;
+  String currentTime = '', endTime = '';
+  bool isPlaying = false;
 
-  // final Duration _duration = const Duration();
-  // final Duration _position = const Duration();
 
-  // late AudioPlayer advancedPlayer;
+  late final PageManger _pageManager;
 
-  late AudioPlayer audioPlayer;
+  final AudioPlayer player = AudioPlayer();
   @override
   void initState() {
     super.initState();
-    audioPlayer = AudioPlayer();
-    currentValue = minimumValue;
-    maximumValue = audioPlayer.position.inMilliseconds.toDouble();
-
-      setState(() {
-        currentTime=getDuration(currentValue);
-        endTime=getDuration(maximumValue);
-      });
-      audioPlayer.positionStream.listen((duration) {
-        currentValue=duration.inMilliseconds.toDouble();
-      });
-     setState(() {
-        currentTime=getDuration(currentValue);
-      });
-
+    _pageManager = PageManger();
   }
 
   @override
   void dispose() {
-    audioPlayer.dispose();
+    _pageManager.dispose();
+    super.dispose();
   }
 
-  void changeToSecond(int second){
-    Duration newDuration = Duration(seconds: second);
-    audioPlayer.seek(newDuration);
-  }
-  String getDuration(double value)  {
-    Duration duration=Duration(milliseconds: value.round());
 
-    return [duration.inMinutes, duration.inSeconds].map((element)=>element.remainder(60).toString().padLeft(2, '0')).join(':');
+  void setSong(SongModel songInfo) async {
+    widget.songInfo = songInfo;
+    await player.setUrl(widget.songInfo.data);
+    currentValue = minimumValue;
+    maximumValue = player.duration!.inMilliseconds.toDouble();
+    if (currentValue == maximumValue) {
+      widget.changeTrack(true);
+    }
+    setState(() {
+      currentTime = getDuration(currentValue);
+      endTime = getDuration(maximumValue);
+    });
+    isPlaying = false;
+    changeStatus();
+    player.positionStream.listen((duration) {
+      currentValue = duration.inMilliseconds.toDouble();
+      setState(() {
+        currentTime = getDuration(currentValue);
+        if (currentValue == maximumValue) {
+          widget.changeTrack(true);
+        }
+      });
+    });
+  }
+
+  void changeStatus() {
+    setState(() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    });
+  }
+
+  void nextSong() {
+    setState(() {
+      if (currentValue >= maximumValue) {
+        widget.changeTrack(true);
+      }
+    });
+  }
+
+  String getDuration(double value) {
+    Duration duration = Duration(milliseconds: value.round());
+
+    return [duration.inMinutes, duration.inSeconds]
+        .map((element) => element.remainder(60).toString().padLeft(2, '0'))
+        .join(':');
   }
 
 
@@ -67,7 +103,6 @@ class _DemoPlayScreenState extends State<DemoPlayScreen> {
   int play = 0;
 
 
-  bool isPlaying=false;
   bool isPaused=false;
 
   final List<IconData> _icons=[
@@ -90,10 +125,23 @@ class _DemoPlayScreenState extends State<DemoPlayScreen> {
                   left: 0,
                   right: 0,
                   height: Height - 168,
-                  child: const Image(
-                    image: AssetImage('images/playmusic.jpg'),
-                    fit: BoxFit.fill,
-                  ),
+                  child: QueryArtworkWidget(
+                    id: widget.songInfo.id,
+                    type: ArtworkType.AUDIO,
+                    artworkFit: BoxFit.cover,
+                    artworkBorder: BorderRadius.zero,
+                    nullArtworkWidget: Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.zero,
+                          color: Colors.blueGrey),
+                      child: const Icon(
+                        Icons.audiotrack,
+                        color: Colors.white,
+                      ),
+                      height: 60,
+                      width: 60,
+                    ),
+                  )
                 ),
                 Positioned(
                   top: 0,
@@ -187,46 +235,53 @@ class _DemoPlayScreenState extends State<DemoPlayScreen> {
                           height: 50,
                           width: Width,
                           child: Marquee(
-                            text: "The Kid LAROI, Justin Bieber - STAY",
+                            text: widget.songInfo.title,
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'roboto',
-                                color: Colors.redAccent),
+                                color: Colors.black87),
                             blankSpace: 150,
                             velocity: 50,
                           ),
                         ),
-                        const Text('Justin Bieber'),
+                         Text(widget.songInfo.artist.toString()),
                         const SizedBox(
                           height: 10,
                         ),
 
-
-
                         SizedBox(
-                          width: Width,
-                          height: 25,
-                          child: Slider(
-                            min:minimumValue,
-                            max: maximumValue,
-                            value: currentValue,
-                            activeColor: Colors.orange,
-                            inactiveColor: Colors.grey,
-                            onChanged: (value) {
-                              currentValue = value;
-                              audioPlayer.seek(Duration(milliseconds: currentValue.round()));
-
-                            },
-                          ),
+                            width: Width-15,
+                            height: 25,
+                            child: Slider(
+                                inactiveColor: Colors.grey,
+                                activeColor: Colors.orange,
+                                min: minimumValue,
+                                max: maximumValue,
+                                value: currentValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    currentValue = value;
+                                    player.seek(Duration(
+                                        milliseconds: currentValue.toInt()));
+                                  });
+                                }),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(left: 22,right: 22),
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(currentTime,style: const TextStyle(color: Colors.grey, fontSize: 12.5, fontWeight: FontWeight.w500)),
-                              Text(endTime, style: const TextStyle(color: Colors.grey, fontSize: 12.5, fontWeight: FontWeight.w500)),
+                              Text(currentTime,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),),
+                              Text(endTime,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),),
                             ],
                           ),
                         ),
@@ -243,32 +298,27 @@ class _DemoPlayScreenState extends State<DemoPlayScreen> {
                                 size: 30,
                               ),
                               onPressed: () {
+                                widget.changeTrack(false);
                                 debugPrint('previous');
                               },
                               //       padding: const EdgeInsets.all(8.0),
                             ),
                             SizedBox(
-                              height: 90,
-                              width: 90,
-                              child: IconButton(
-                                iconSize: 70,
-                                color: Colors.red,
-                                icon:isPlaying==false? Icon(_icons[0]):Icon(_icons[1]),
-                                onPressed: ()async{
-                                  await audioPlayer.setAsset('Assets/Stay_192.mp3');
-                                  audioPlayer.play();
-                                  if(isPlaying==false){
-                                    setState(() {
-                                      isPlaying = true;
-                                    });
-                                  }else if(isPlaying==true){
-                                    audioPlayer.pause();
-                                    setState(() {
-                                      isPlaying=false;
-                                    });
-                                  }
-                                },
-                              ),
+                                height: 90,
+                                width: 90,
+                                child: GestureDetector(
+                                  child: Icon(
+                                    isPlaying
+                                        ? Icons.pause_circle_filled
+                                        : Icons.play_circle_fill,
+                                    color: Colors.orange,
+                                    size: 70,
+                                  ),
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    changeStatus();
+                                  },
+                                ),
                             ),
                             IconButton(
                               icon: const Icon(
@@ -276,6 +326,7 @@ class _DemoPlayScreenState extends State<DemoPlayScreen> {
                                 size: 30,
                               ),
                               onPressed: () {
+                                widget.changeTrack(true);
                                 debugPrint('next');
                               },
                             ),
@@ -289,8 +340,6 @@ class _DemoPlayScreenState extends State<DemoPlayScreen> {
                   ),
                 ),
               ],
-            )
-        )
-    );
+            )));
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicplayer/Database/db.dart';
+import 'package:musicplayer/play_screen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import './Database/database_handler.dart';
-
+import './fav_playscrenn.dart';
 
 class Favourites extends StatefulWidget {
   const Favourites({Key? key}) : super(key: key);
@@ -14,6 +15,11 @@ class Favourites extends StatefulWidget {
 }
 
 class _FavouritesState extends State<Favourites> {
+  final GlobalKey<FFavPlayScreenState> Key = GlobalKey<FFavPlayScreenState>();
+
+
+  List<SongModel> favSongs = [];
+  int currentIndex = 0;
 
   DatabaseHandler? handler;
   late final AudioPlayer player;
@@ -24,7 +30,30 @@ class _FavouritesState extends State<Favourites> {
     super.initState();
     handler = DatabaseHandler();
     player = AudioPlayer();
+    getTracks();
   }
+
+  void getTracks() async {
+    favSongs = await audioQuery.querySongs();
+    setState(() {
+      favSongs = favSongs;
+    });
+  }
+
+
+  void changeTrack(bool isNext) {
+    if (isNext) {
+      if (currentIndex != favSongs.length - 1) {
+        currentIndex++;
+      }
+    } else {
+      if (currentIndex != 0) {
+        currentIndex--;
+      }
+    }
+    Key.currentState!.setSong(favSongs[currentIndex]);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +68,8 @@ class _FavouritesState extends State<Favourites> {
             FutureBuilder(
               future: this.handler!.retrieveUsers(),
               builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+                print('songsssssssssssssssssssssss ${favSongs[currentIndex]}');
+
                 if (snapshot.hasData) {
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
@@ -84,6 +115,7 @@ class _FavouritesState extends State<Favourites> {
                               width: 50,
                             ),
                           ),
+                         onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FavPlayScreen(songInfo:favSongs[currentIndex], changeTrack: changeTrack, Key:Key,),));},
 
                         ),
                       );

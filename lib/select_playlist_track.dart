@@ -8,8 +8,7 @@ import 'Database/playlist_songs.dart';
 class SelectPlaylistSongs extends StatefulWidget {
   int playlistiddd;
 
-    SelectPlaylistSongs({Key? key,required this.playlistiddd}) : super(key: key);
-
+  SelectPlaylistSongs({Key? key, required this.playlistiddd}) : super(key: key);
 
   @override
   _SelectPlaylistSongsState createState() => _SelectPlaylistSongsState();
@@ -22,8 +21,9 @@ class _SelectPlaylistSongsState extends State<SelectPlaylistSongs> {
   String? songName_2;
   String? path_2;
   List<SongModel> playlistsongs = [];
- // int currentIndex = 0;
- // int add =0;
+
+  // int currentIndex = 0;
+  // int add =0;
   late PlaylistDatabaseHandler playlistSongHandler;
 
   @override
@@ -42,9 +42,11 @@ class _SelectPlaylistSongsState extends State<SelectPlaylistSongs> {
   }
 
   Future<int> addUsers(songID_2, playlistID_2, path_2, songName_2) async {
-
-    PlaylistSongs firstUser =
-    PlaylistSongs(path: path_2, songName: songName_2, songID: songID_2, playlistID: playlistID_2);
+    PlaylistSongs firstUser = PlaylistSongs(
+        path: path_2,
+        songName: songName_2,
+        songID: songID_2,
+        playlistID: playlistID_2);
     List<PlaylistSongs> listOfUsers = [firstUser];
     print("songtilte:$songName_2");
     print("songid: $songID_2");
@@ -79,106 +81,107 @@ class _SelectPlaylistSongsState extends State<SelectPlaylistSongs> {
           },
         ),
       ),
-          body:  FutureBuilder<List<SongModel>>(
-            future: audioQuery.querySongs(
-              sortType: SongSortType.DISPLAY_NAME,
-              orderType: OrderType.ASC_OR_SMALLER,
-              uriType: UriType.EXTERNAL,
-              ignoreCase: true,
-            ),
-            builder: (context, item) {
-              if (item.data == null) {
-                return const CircularProgressIndicator();
-              }
-              if (item.data!.isEmpty) {
-                return const Text("Nothing found!");
-              }
+      body: FutureBuilder<List<SongModel>>(
+        future: audioQuery.querySongs(
+          sortType: SongSortType.DISPLAY_NAME,
+          orderType: OrderType.ASC_OR_SMALLER,
+          uriType: UriType.EXTERNAL,
+          ignoreCase: true,
+        ),
+        builder: (context, item) {
+          if (item.data == null) {
+            return const CircularProgressIndicator();
+          }
+          if (item.data!.isEmpty) {
+            return const Text("Nothing found!");
+          }
 
-              return ListView.builder(
-                itemCount: playlistsongs.length,
-                itemBuilder: (context, index) {
-                  if (playlistsongs[index].data.contains("mp3")) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            //currentIndex = index;
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => PlayScreen(
-                            //       //  changeTrack: changeTrack,
-                            //         songInfo: songs[currentIndex],
-                            //         Key: Key,
-                            //         //TODO : GLOBAL KEY
-                            //       ),
-                            //     ));
-                          },
-                          child: ListTile(
-                            title: Text(
-                              playlistsongs[index].title,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              playlistsongs[index].artist ?? "Unknown Artist",
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: SizedBox(
-                              height: Height / 7,
-                              width: Width / 7,
-                              child:  IconButton(
-                               icon:  const Icon(Icons.add_circle_outline),
-                                  //   : const Icon(
-                                  // Icons.check,
-                                 // color: Colors.orange,
+          return ListView.builder(
+            itemCount: playlistsongs.length,
+            itemBuilder: (context, index) {
+              if (playlistsongs[index].data.contains("mp3")) {
+                return Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        //currentIndex = index;
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => PlayScreen(
+                        //       //  changeTrack: changeTrack,
+                        //         songInfo: songs[currentIndex],
+                        //         Key: Key,
+                        //         //TODO : GLOBAL KEY
+                        //       ),
+                        //     ));
+                      },
+                      child: ListTile(
+                        title: Text(
+                          playlistsongs[index].title,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          playlistsongs[index].artist ?? "Unknown Artist",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: SizedBox(
+                          height: Height / 7,
+                          width: Width / 7,
+                          child: IconButton(
+                            icon: const Icon(Icons.add_circle_outline),
+                            //   : const Icon(
+                            // Icons.check,
+                            // color: Colors.orange,
 
-                                onPressed: () {
-                                  setState(() {
-                                    songID_2 = playlistsongs[index].id;
-                                    playlistID_2 = widget.playlistiddd;
-                                    songName_2 = playlistsongs[index].title;
-                                    path_2 = playlistsongs[index].data;
-                                    addUsers(songID_2, playlistID_2, songName_2, path_2);
-                                    // add == 0 ? add = 1 : add = 0;
-                                  });
-                                },
-                              ),
-                            ),
-                            leading: QueryArtworkWidget(
-                              artworkBorder: BorderRadius.circular(10),
-                              id: playlistsongs[index].id,
-                              type: ArtworkType.AUDIO,
-                              nullArtworkWidget: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.blueGrey),
-                                child: const Icon(
-                                  Icons.audiotrack,
-                                  color: Colors.white,
-                                ),
-                                height: 50,
-                                width: 50,
-                              ),
-                            ),
-                            onTap: (){
-                              //addPlaylistSongs(songID_2, playlistID_2, songName_2, path_2);
+                            onPressed: () {
+                              setState(() {
+                                songID_2 = playlistsongs[index].id;
+                                playlistID_2 = widget.playlistiddd;
+                                songName_2 = playlistsongs[index].title;
+                                path_2 = playlistsongs[index].data;
+                                addUsers(
+                                    songID_2, playlistID_2, songName_2, path_2);
+                                // add == 0 ? add = 1 : add = 0;
+                              });
                             },
                           ),
                         ),
-                        const Divider(
-                          height: 0,
-                          indent: 5,
-                        )
-                      ],
-                    );
-                  }
-                  return Container(
-                    height: 0,
-                  );
-                },
+                        leading: QueryArtworkWidget(
+                          artworkBorder: BorderRadius.circular(10),
+                          id: playlistsongs[index].id,
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.blueGrey),
+                            child: const Icon(
+                              Icons.audiotrack,
+                              color: Colors.white,
+                            ),
+                            height: 50,
+                            width: 50,
+                          ),
+                        ),
+                        onTap: () {
+                          //addPlaylistSongs(songID_2, playlistID_2, songName_2, path_2);
+                        },
+                      ),
+                    ),
+                    const Divider(
+                      height: 0,
+                      indent: 5,
+                    )
+                  ],
+                );
+              }
+              return Container(
+                height: 0,
               );
             },
-          ),
+          );
+        },
+      ),
     ));
   }
 }

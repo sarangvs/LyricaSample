@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'Database/database_handler.dart';
 import 'Database/db.dart';
 import 'managers/page_manager.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 class PlayScreen extends StatefulWidget {
   SongModel songInfo;
@@ -31,7 +32,6 @@ class PlayScreenState extends State<PlayScreen> {
   bool isPlaying = false;
 
 
-
   DatabaseHandler? handler;
   dynamic songTitle_2;
   dynamic songId_2;
@@ -44,14 +44,14 @@ class PlayScreenState extends State<PlayScreen> {
   @override
   void initState() {
     super.initState();
-    _pageManager = PageManger();
+   _pageManager = PageManger();
     addUser(songTitle_2, songId_2, songData_2);
     handler =DatabaseHandler();
   }
 
   @override
   void dispose() {
-    _pageManager.dispose();
+ _pageManager.dispose();
     super.dispose();
   }
 ///ADDING SONGS
@@ -64,7 +64,6 @@ class PlayScreenState extends State<PlayScreen> {
     print("songdata: $songData_2");
     print('list of users $listOfUsers');
     return await handler!.insertUser(listOfUsers);
-
   }
 
   void setSong(SongModel songInfo) async {
@@ -91,6 +90,8 @@ class PlayScreenState extends State<PlayScreen> {
       });
     });
   }
+
+
 
   void changeStatus() {
     setState(() {
@@ -144,13 +145,14 @@ class PlayScreenState extends State<PlayScreen> {
             backgroundColor: Colors.grey[50],
             body: Stack(
               children: [
+
                 Positioned(
                     top: 0,
                     left: 0,
                     right: 0,
                     height: Height - 168,
-                    child: QueryArtworkWidget(
-                      id: widget.songInfo.id,
+                    child:  QueryArtworkWidget(
+                      id:  widget.songInfo.id,
                       type: ArtworkType.AUDIO,
                       artworkFit: BoxFit.cover,
                       artworkBorder: BorderRadius.zero,
@@ -285,59 +287,82 @@ class PlayScreenState extends State<PlayScreen> {
                               value: currentValue,
                               onChanged: (value) {
                                 setState(() {
-                                  currentValue <= value;
+                                  currentValue = value;
                                   player.seek(Duration(
-                                      milliseconds: currentValue.round()));
+                                      milliseconds: currentValue.toInt()));
                                 });
                               }),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(currentTime,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                              ),),
+                              Text(endTime,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),),
+                            ],
+                          ),
+                        ),
+                        Column(
                           children: [
-                            const SizedBox(
-                              width: 50,
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.fast_rewind,
-                                size: 30,
-                              ),
-                              onPressed: () {
-                                widget.changeTrack(false);
-                                debugPrint('previous');
-                              },
-                              //       padding: const EdgeInsets.all(8.0),
-                            ),
-                            SizedBox(
-                              height: 90,
-                              width: 90,
-                              child: GestureDetector(
-                                child: Icon(
-                                  isPlaying
-                                      ? Icons.pause_circle_filled
-                                      : Icons.play_circle_fill,
-                                  color: Colors.orange,
-                                  size: 70,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  width: 50,
                                 ),
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  changeStatus();
-                                },
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.fast_forward,
-                                size: 30,
-                              ),
-                              onPressed: () {
-                                widget.changeTrack(true);
-                                debugPrint('next');
-                              },
-                            ),
-                            const SizedBox(
-                              width: 50,
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.fast_rewind,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+
+                                   widget.changeTrack(false);
+                                    debugPrint('previous');
+                                  },
+                                  //       padding: const EdgeInsets.all(8.0),
+                                ),
+                                SizedBox(
+                                  height: 90,
+                                  width: 90,
+                                  child: GestureDetector(
+                                    child: Icon(
+                                      isPlaying
+                                          ? Icons.pause_circle_filled
+                                          : Icons.play_circle_fill,
+                                      color: Colors.orange,
+                                      size: 70,
+                                    ),
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      changeStatus();
+                                    },
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.fast_forward,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    widget.changeTrack(true);
+                                    debugPrint('next');
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 50,
+                                ),
+                              ],
                             ),
                           ],
                         ),
