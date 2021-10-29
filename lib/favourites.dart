@@ -17,7 +17,6 @@ class Favourites extends StatefulWidget {
 class _FavouritesState extends State<Favourites> {
   final GlobalKey<FFavPlayScreenState> Key = GlobalKey<FFavPlayScreenState>();
 
-
   List<SongModel> favSongs = [];
   int currentIndex = 0;
 
@@ -40,7 +39,6 @@ class _FavouritesState extends State<Favourites> {
     });
   }
 
-
   void changeTrack(bool isNext) {
     if (isNext) {
       if (currentIndex != favSongs.length - 1) {
@@ -54,22 +52,20 @@ class _FavouritesState extends State<Favourites> {
     Key.currentState!.setSong(favSongs[currentIndex]);
   }
 
-
   @override
   Widget build(BuildContext context) {
-   // var bookmarkBloc = Provider.of<BookMarkBloc>(context);
-    
+    // var bookmarkBloc = Provider.of<BookMarkBloc>(context);
+
     var Height = MediaQuery.of(context).size.height;
     var Width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         body: Stack(
-          children:  [
+          children: [
             FutureBuilder(
               future: this.handler!.retrieveUsers(),
-              builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
-                print('songsssssssssssssssssssssss ${favSongs[currentIndex]}');
-
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
@@ -90,8 +86,14 @@ class _FavouritesState extends State<Favourites> {
                           });
                         },
                         child: ListTile(
-                          title: Text(snapshot.data![index].name,overflow: TextOverflow.ellipsis,),
-                          subtitle: Text(snapshot.data![index].name ,overflow: TextOverflow.ellipsis,),
+                          title: Text(
+                            snapshot.data![index].name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            snapshot.data![index].name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           trailing: SizedBox(
                             height: Height / 7,
                             width: Width / 7,
@@ -108,15 +110,31 @@ class _FavouritesState extends State<Favourites> {
                             nullArtworkWidget: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blueGrey
+                                  color: Colors.blueGrey),
+                              child: const Icon(
+                                Icons.audiotrack,
+                                color: Colors.white,
                               ),
-                              child: const Icon(Icons.audiotrack,color: Colors.white,),
                               height: 50,
                               width: 50,
                             ),
                           ),
-                         onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FavPlayScreen(songInfo:favSongs[currentIndex], changeTrack: changeTrack, Key:Key,),));},
-
+                          onTap: () {
+                            dynamic songData = snapshot.data![index].location;
+                            dynamic songTitle = snapshot.data![index].name;
+                            dynamic songID = snapshot.data![index].num;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FavPlayScreen(
+                                    songData: songData,
+                                    songTitle: songTitle,
+                                    songID: songID,
+                                    changeTrack: changeTrack,
+                                    Key: Key,
+                                  ),
+                                ));
+                          },
                         ),
                       );
                     },
@@ -126,9 +144,9 @@ class _FavouritesState extends State<Favourites> {
                 }
               },
             ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }

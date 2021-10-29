@@ -1,10 +1,12 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicplayer/Database/playlist_songs.dart';
 import 'package:musicplayer/select_playlist_track.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-
 import 'Database/playlist_folder_handler.dart';
+
+
 
 class PlaylistScreen extends StatefulWidget {
   dynamic playlistfolderID;
@@ -126,7 +128,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                 width: 50,
                               ),
                             ),
-
+                               onTap: (){
+                              null;
+                               },
                           ),
                         );
                       },

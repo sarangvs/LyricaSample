@@ -10,9 +10,10 @@ import 'managers/page_manager.dart';
 
 
 class FavPlayScreen extends StatefulWidget {
-  SongModel songInfo;
-
-   FavPlayScreen({required this.songInfo,required this.changeTrack,required this.Key}) : super(key: Key);
+  dynamic songData;
+  dynamic songTitle;
+  dynamic songID;
+   FavPlayScreen({required this.songData,required this.songTitle,required this.songID,required this.changeTrack,required this.Key}) : super(key: Key);
 
   Function changeTrack;
  final GlobalKey<FFavPlayScreenState> Key;
@@ -34,6 +35,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
   void initState() {
     super.initState();
     _pageManager = PageManger();
+    setSong(widget.songData);
   }
 
   @override
@@ -43,9 +45,9 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
   }
 
 
-  void setSong(SongModel songInfo) async {
-    widget.songInfo = songInfo;
-    await player.setUrl(widget.songInfo.data);
+  void setSong(dynamic songData) async {
+    widget.songData = songData;
+    await player.setUrl(widget.songData);
     currentValue = minimumValue;
     maximumValue = player.duration!.inMilliseconds.toDouble();
     if (currentValue == maximumValue) {
@@ -126,7 +128,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
                   right: 0,
                   height: Height - 168,
                   child: QueryArtworkWidget(
-                    id: widget.songInfo.id,
+                    id: widget.songID,
                     type: ArtworkType.AUDIO,
                     artworkFit: BoxFit.cover,
                     artworkBorder: BorderRadius.zero,
@@ -177,65 +179,65 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: fav == 0
-                                  ? const Icon(Icons.favorite_border)
-                                  : const Icon(
-                                Icons.favorite,
-                                color: Colors.orange,
-                              ),
-                              onPressed: () {
-                                debugPrint("fav button");
-                                setState(() {
-                                  fav == 0 ? fav = 1 : fav = 0;
-                                });
-                              },
-                            ),
-                            // SizedBox(
-                            //   width: Width / 5,
-                            // ),
-                            IconButton(
-                              icon: shuffle == 0
-                                  ? const Icon(Icons.shuffle)
-                                  : const Icon(
-                                Icons.shuffle,
-                                color: Colors.orange,
-                              ),
-                              onPressed: () {
-                                debugPrint("Shuffle button");
-                                setState(() {
-                                  shuffle == 0 ? shuffle = 1 : shuffle = 0;
-                                });
-                              },
-                            ),
-                            // SizedBox(
-                            //   width: Width / 5,
-                            // ),
-                            IconButton(
-                              icon: repeat == 0
-                                  ? const Icon(Icons.repeat)
-                                  : const Icon(
-                                Icons.repeat,
-                                color: Colors.orange,
-                              ),
-                              onPressed: () {
-                                debugPrint("repeat button");
-                                setState(() {
-                                  repeat == 0 ? repeat = 1 : repeat = 0;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   children: [
+                        //     IconButton(
+                        //       icon: fav == 0
+                        //           ? const Icon(Icons.favorite_border)
+                        //           : const Icon(
+                        //         Icons.favorite,
+                        //         color: Colors.orange,
+                        //       ),
+                        //       onPressed: () {
+                        //         debugPrint("fav button");
+                        //         setState(() {
+                        //           fav == 0 ? fav = 1 : fav = 0;
+                        //         });
+                        //       },
+                        //     ),
+                        //     // SizedBox(
+                        //     //   width: Width / 5,
+                        //     // ),
+                        //     IconButton(
+                        //       icon: shuffle == 0
+                        //           ? const Icon(Icons.shuffle)
+                        //           : const Icon(
+                        //         Icons.shuffle,
+                        //         color: Colors.orange,
+                        //       ),
+                        //       onPressed: () {
+                        //         debugPrint("Shuffle button");
+                        //         setState(() {
+                        //           shuffle == 0 ? shuffle = 1 : shuffle = 0;
+                        //         });
+                        //       },
+                        //     ),
+                        //     // SizedBox(
+                        //     //   width: Width / 5,
+                        //     // ),
+                        //     IconButton(
+                        //       icon: repeat == 0
+                        //           ? const Icon(Icons.repeat)
+                        //           : const Icon(
+                        //         Icons.repeat,
+                        //         color: Colors.orange,
+                        //       ),
+                        //       onPressed: () {
+                        //         debugPrint("repeat button");
+                        //         setState(() {
+                        //           repeat == 0 ? repeat = 1 : repeat = 0;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 50,
                           width: Width,
                           child: Marquee(
-                            text: widget.songInfo.title,
+                            text: widget.songTitle,
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -245,7 +247,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
                             velocity: 50,
                           ),
                         ),
-                         Text(widget.songInfo.artist.toString()),
+                         Text(widget.songTitle,overflow: TextOverflow.ellipsis,),
                         const SizedBox(
                           height: 10,
                         ),

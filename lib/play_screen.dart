@@ -95,7 +95,7 @@ class PlayScreenState extends State<PlayScreen> {
 
   void stopSong(){
     setState(() {
-      player.play();
+      player.pause();
     });
   }
 
