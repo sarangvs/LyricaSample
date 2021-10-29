@@ -28,21 +28,21 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
   bool isPlaying = false;
 
 
-  late final PageManger _pageManager;
+  // late final PageManger _pageManager;
 
   final AudioPlayer player = AudioPlayer();
   @override
   void initState() {
     super.initState();
-    _pageManager = PageManger();
+    // _pageManager = PageManger();
     setSong(widget.songData);
   }
 
-  @override
-  void dispose() {
-    _pageManager.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // _pageManager.dispose();
+  //   super.dispose();
+  // }
 
 
   void setSong(dynamic songData) async {
