@@ -12,8 +12,7 @@ class Songscreen extends StatefulWidget {
   const Songscreen({Key? key}) : super(key: key);
 
   @override
-  _SongscreenState createState() => _SongscreenState();
-}
+  _SongscreenState createState() => _SongscreenState();}
 
 class _SongscreenState extends State<Songscreen> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
@@ -86,14 +85,13 @@ class _SongscreenState extends State<Songscreen> {
                 return ListView.builder(
                   itemCount: songs.length,
                   itemBuilder: (context, index) {
+                    int songImage = songs[index].id;
                     if (songs[index].data.contains("mp3")) {
                       return Column(
                         children: [
                           GestureDetector(
                             onTap: () {
                               currentIndex = index;
-
-
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -156,6 +154,7 @@ class _SongscreenState extends State<Songscreen> {
               },
             ),
           ),
+
         ],
       ),
     ));

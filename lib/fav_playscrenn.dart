@@ -10,9 +10,15 @@ import 'managers/page_manager.dart';
 
 
 class FavPlayScreen extends StatefulWidget {
-  SongModel songInfo;
+  // SongModel songInfo;
 
-   FavPlayScreen({required this.songInfo,required this.changeTrack,required this.Key}) : super(key: Key);
+  var songTitle;
+
+  var songID;
+
+  var songData;
+
+   FavPlayScreen({required this.songTitle,required this.songID, required this.songData,required this.changeTrack,required this.Key}) : super(key: Key);
 
   Function changeTrack;
  final GlobalKey<FFavPlayScreenState> Key;
@@ -34,6 +40,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
   void initState() {
     super.initState();
     _pageManager = PageManger();
+    setSong(widget.songData);
   }
 
   @override
@@ -43,9 +50,9 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
   }
 
 
-  void setSong(SongModel songInfo) async {
-    widget.songInfo = songInfo;
-    await player.setUrl(widget.songInfo.data);
+  void setSong(var songData) async {
+    widget.songData = songData;
+    await player.setUrl(widget.songData.data);
     currentValue = minimumValue;
     maximumValue = player.duration!.inMilliseconds.toDouble();
     if (currentValue == maximumValue) {
@@ -70,7 +77,9 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
 
   void changeStatus() {
     setState(() {
-      isPlaying = !isPlaying;
+      isPlaying =!isPlaying;
+    });
+    setState(() {
       if (isPlaying) {
         player.play();
       } else {
@@ -126,7 +135,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
                   right: 0,
                   height: Height - 168,
                   child: QueryArtworkWidget(
-                    id: widget.songInfo.id,
+                    id: widget.songID.id,
                     type: ArtworkType.AUDIO,
                     artworkFit: BoxFit.cover,
                     artworkBorder: BorderRadius.zero,
@@ -235,7 +244,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
                           height: 50,
                           width: Width,
                           child: Marquee(
-                            text: widget.songInfo.title,
+                            text: widget.songTitle.title,
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -245,7 +254,7 @@ class FFavPlayScreenState extends State<FavPlayScreen> {
                             velocity: 50,
                           ),
                         ),
-                         Text(widget.songInfo.artist.toString()),
+                         Text(widget.songTitle.artist.toString()),
                         const SizedBox(
                           height: 10,
                         ),

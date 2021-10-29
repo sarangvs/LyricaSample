@@ -14,7 +14,6 @@ import 'package:just_audio_background/just_audio_background.dart';
 
 class PlayScreen extends StatefulWidget {
   SongModel songInfo;
-
   PlayScreen(
       {required this.songInfo, required this.changeTrack, required this.Key})
       : super(key: Key);
@@ -37,14 +36,14 @@ class PlayScreenState extends State<PlayScreen> {
   dynamic songId_2;
   dynamic songData_2;
 
-  late final PageManger _pageManager;
+  //late final PageManger _pageManager;
 
   final AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-   _pageManager = PageManger();
+ //  _pageManager = PageManger();
     addUser(songTitle_2, songId_2, songData_2);
     handler =DatabaseHandler();
     setSong(widget.songInfo);
@@ -52,7 +51,7 @@ class PlayScreenState extends State<PlayScreen> {
 
   @override
   void dispose() {
- _pageManager.dispose();
+// _pageManager.dispose();
     super.dispose();
   }
 ///ADDING SONGS
@@ -95,7 +94,7 @@ class PlayScreenState extends State<PlayScreen> {
 
   void stopSong(){
     setState(() {
-      player.play();
+      player.pause();
     });
   }
 
@@ -195,6 +194,25 @@ class PlayScreenState extends State<PlayScreen> {
                         Navigator.pop(context);
                       },
                     ),
+                    actions: [
+                      IconButton(
+                        icon: fav == 0
+                            ? const Icon(Icons.favorite_border)
+                            : const Icon(
+                          Icons.favorite,
+                          color: Colors.orange,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            songTitle_2 = widget.songInfo.title;
+                            songData_2 = widget.songInfo.data;
+                            songId_2 = widget.songInfo.id;
+                            addUser(songTitle_2, songId_2, songData_2);
+                            fav == 0 ? fav = 1 : fav = 0;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Positioned(
@@ -211,63 +229,47 @@ class PlayScreenState extends State<PlayScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: fav == 0
-                                  ? const Icon(Icons.favorite_border)
-                                  : const Icon(
-                                      Icons.favorite,
-                                      color: Colors.orange,
-                                    ),
-                              onPressed: () {
-                                setState(() {
-                                  songTitle_2 = widget.songInfo.title;
-                                  songData_2 = widget.songInfo.data;
-                                  songId_2 = widget.songInfo.id;
-                                  addUser(songTitle_2, songId_2, songData_2);
-                                  fav == 0 ? fav = 1 : fav = 0;
-                                });
-                              },
-                            ),
-                            // SizedBox(
-                            //   width: Width / 5,
-                            // ),
-                            IconButton(
-                              icon: shuffle == 0
-                                  ? const Icon(Icons.shuffle)
-                                  : const Icon(
-                                      Icons.shuffle,
-                                      color: Colors.orange,
-                                    ),
-                              onPressed: () {
-                                debugPrint("Shuffle button");
-                                setState(() {
-                                  shuffle == 0 ? shuffle = 1 : shuffle = 0;
-                                });
-                              },
-                            ),
-                            // SizedBox(
-                            //   width: Width / 5,
-                            // ),
-                            IconButton(
-                              icon: repeat == 0
-                                  ? const Icon(Icons.repeat)
-                                  : const Icon(
-                                      Icons.repeat,
-                                      color: Colors.orange,
-                                    ),
-                              onPressed: () {
-                                debugPrint("repeat button");
-                                setState(() {
-                                  repeat == 0 ? repeat = 1 : repeat = 0;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   children: const [
+                        //
+                        //     // SizedBox(
+                        //     //   width: Width / 5,
+                        //     // ),
+                        //     // IconButton(
+                        //     //   icon: shuffle == 0
+                        //     //       ? const Icon(Icons.shuffle)
+                        //     //       : const Icon(
+                        //     //           Icons.shuffle,
+                        //     //           color: Colors.orange,
+                        //     //         ),
+                        //     //   onPressed: () {
+                        //     //     debugPrint("Shuffle button");
+                        //     //     setState(() {
+                        //     //       shuffle == 0 ? shuffle = 1 : shuffle = 0;
+                        //     //     });
+                        //     //   },
+                        //   //  ),
+                        //     // SizedBox(
+                        //     //   width: Width / 5,
+                        //     // ),
+                        //     // IconButton(
+                        //     //   icon: repeat == 0
+                        //     //       ? const Icon(Icons.repeat)
+                        //     //       : const Icon(
+                        //     //           Icons.repeat,
+                        //     //           color: Colors.orange,
+                        //     //         ),
+                        //     //   onPressed: () {
+                        //     //     debugPrint("repeat button");
+                        //     //     setState(() {
+                        //     //       repeat == 0 ? repeat = 1 : repeat = 0;
+                        //     //     });
+                        //     //   },
+                        //     // ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 50,
                           width: Width,

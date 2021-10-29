@@ -14,7 +14,7 @@ import 'package:musicplayer/searchbar.dart';
 import 'package:audio_service/audio_service.dart';
 
 void main() async {
-  await setupServiceLocator();
+  //await setupServiceLocator();
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

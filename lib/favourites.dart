@@ -69,7 +69,9 @@ class _FavouritesState extends State<Favourites> {
               future: this.handler!.retrieveUsers(),
               builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
                 print('songsssssssssssssssssssssss ${favSongs[currentIndex]}');
-
+                var songTile = favSongs[currentIndex].title;
+                var songID = favSongs[currentIndex].id;
+                var songData = favSongs[currentIndex].data;
                 if (snapshot.hasData) {
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
@@ -115,7 +117,7 @@ class _FavouritesState extends State<Favourites> {
                               width: 50,
                             ),
                           ),
-                         onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FavPlayScreen(songInfo:favSongs[currentIndex], changeTrack: changeTrack, Key:Key,),));},
+                         onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => FavPlayScreen( changeTrack: changeTrack, Key:Key, songID: songID, songData: songData, songTitle: songTile,),));},
 
                         ),
                       );

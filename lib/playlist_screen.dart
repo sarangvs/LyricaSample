@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicplayer/Database/playlist_songs.dart';
+import 'package:musicplayer/fav_playscrenn.dart';
 import 'package:musicplayer/select_playlist_track.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -15,6 +16,32 @@ class PlaylistScreen extends StatefulWidget {
 }
 
 class _PlaylistScreenState extends State<PlaylistScreen> {
+ // final GlobalKey<FFavPlayScreenState> Key = GlobalKey<FFavPlayScreenState>();
+
+
+  List<SongModel> playlistSong = [];
+  int currentIndex = 0;
+
+  void getTracks() async {
+    playlistSong = await audioQuery.querySongs();
+    setState(() {
+      playlistSong = playlistSong;
+    });
+  }
+
+  // void changeTrack(bool isNext) {
+  //   if (isNext) {
+  //     if (currentIndex != playlistSong.length - 1) {
+  //       currentIndex++;
+  //     }
+  //   } else {
+  //     if (currentIndex != 0) {
+  //       currentIndex--;
+  //     }
+  //   }
+  //   Key.currentState!.setSong(playlistSong[currentIndex]);
+  // }
+
 
   PlaylistDatabaseHandler? _playlistDatabaseHandler;
   late final AudioPlayer player;
@@ -25,6 +52,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     super.initState();
     _playlistDatabaseHandler = PlaylistDatabaseHandler();
     player = AudioPlayer();
+    getTracks();
   }
 
 
@@ -33,7 +61,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   Widget build(BuildContext context) {
     var Height = MediaQuery.of(context).size.height;
     var Width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -126,6 +153,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                 width: 50,
                               ),
                             ),
+                            onTap: (){
+                            //  Navigator.push(context, MaterialPageRoute(builder: (context) => FavPlayScreen(songInfo: playlistSong[currentIndex], changeTrack: changeTrack, Key: Key)));
+                            },
 
                           ),
                         );
